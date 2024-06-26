@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おみくじ</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; }
+        #omikuji { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>おみくじ</h1>
+    <button onclick="getOmikuji()">おみくじを引く</button>
+    <div id="omikuji"></div>
+
+    <script>
+        async function getOmikuji() {
+            const response = await fetch('/api/omikuji');
+            const data = await response.json();
+            document.getElementById('omikuji').innerText = data.message;
+        }
+    </script>
+</body>
+</html>
