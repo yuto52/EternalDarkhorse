@@ -32,6 +32,7 @@ button {
     font-size: 18px;
     padding: 10px 20px;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -46,4 +47,22 @@ button:hover {
     margin-top: 20px;
     padding: 10px;
     white-space: pre-line;
+}
+
+.back-button {
+    position: fixed;
+    right: 80px;
+    bottom: 80px;
+    background-color: #2196f3;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #1e88e5;
 }
