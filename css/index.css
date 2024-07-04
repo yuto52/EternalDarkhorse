@@ -1,0 +1,49 @@
+body {
+    background-color: #000000;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+}
+button {
+    display: block;
+    margin: 10px 0; 
+    width: 300px; 
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.button-container {
+    margin: 10px;
+    text-align: center;
+}
+
+.ranking-container {
+    width: 300px;
+    margin-left: 20px;
+}
+
+.ranking-container h2 {
+    margin-bottom: 10px;
+}
+
+.ranking-container ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
+.ranking-container li {
+    margin-bottom: 5px;
+}
+
+.ranking-container button {
+    margin-top: 200px; 
+}
+
+.txt4{
+    font-size: 4vmax;
+}

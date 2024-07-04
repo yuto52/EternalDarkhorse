@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="refresh" content="150; URL=">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <script>
+        var request = new XMLHttpRequest();
+        request.open('GET', 'https://proxy.cep-hd-dlp.chuden.co.jp/data-n8suh89sqhcjo5g5/data-api/latest?id=CgETViZ2&subscription-key=0e35a874f02a4887adc1ed0b2561f645', true);
+        request.responseType = 'json';
+        request.send();
+        request.onload = function () {
+            var jsonData = this.response;
+            var data = JSON.stringify(jsonData, null, ' ');
+            var jsons = JSON.parse(data);
+            console.log(jsons);
+
+            var buttonsData = [
+                { id: "R3_401", index: 0 },
+                { id: "R3_403", index: 1 },
+                { id: "R3_301", index: 2 },
+                { id: "R3_4F_EH", index: 3 },
+                { id: "R3_3F_EH", index: 4 },
+                { id: "R3_1F_EH", index: 5 },
+                { id: "R3_B1F_EH", index: 7 }
+            ];
+
+            //ボタンの色の設定
+            function setButtonColor(id, co2) {
+                var button = document.getElementById(id);
+                if (co2 <= 999) {
+                    button.style.backgroundColor = "#00AA00";
+                } else if (co2 >= 1000 && co2 <= 1499) {
+                    button.style.backgroundColor = "#FFFF00";
+                } else {
+                    button.style.backgroundColor = "#EE5500";
+                }
+            }
+
+            // ボタンの作成
+            buttonsData.forEach(function (buttonData) {
+                var id = buttonData.id;
+                var index = buttonData.index;
+                var obj = document.getElementById(id);
+                obj.innerHTML = "<p> " + id + " " + jsons[index].co2 + "ppm " + jsons[index].temperature + "℃ " + jsons[index].relativeHumidity + " % </p> ";
+                setButtonColor(id, jsons[index].co2);
+            });
+
+            // CO2レベルでソート
+            jsons.sort((a, b) => b.co2 - a.co2);
+
+            // ランキングをページに追加（トップ3のみ）
+            var ranking = document.getElementById("co2_ranking");
+            var rankingHtml = "<h2>CO₂トップ3ランキング</h2><ol>";
+            for (var i = 0; i < Math.min(3, jsons.length); i++) {
+                rankingHtml += "<li>" + jsons[i].sensorName + ": " + jsons[i].co2 + "ppm</li>";
+            }
+            rankingHtml += "</ol>";
+
+            // おみくじボタンを追加
+            rankingHtml += '<button id="omikuziButton" onclick="location.href=\'omikuji.html\'" style="margin-top: 10px;">おみくじ</button>';
+            ranking.innerHTML = rankingHtml;
+
+             // おみくじボタンのスタイルを設定
+             var nextButton = document.getElementById("omikuziButton");
+            omikuziButton.style.marginTop = "50px";
+            nextButton.style.width = "200px";  
+            nextButton.style.height = "50px";  
+            nextButton.style.fontSize = "20px";
+        }
+        request.onerror = function () {
+            console.log("受信失敗");
+        }
+    </script>
+</head>
+
+<body>
+    <p class="txt4" align="center">永久ダークホース</p>
+    <div class="container">
+        <div class="button-container">
+            <button id="R3_401"></button>
+            <button id="R3_403"></button>
+            <button id="R3_301"></button>
+            <button id="R3_4F_EH"></button>
+            <button id="R3_3F_EH"></button>
+            <button id="R3_1F_EH"></button>
+            <button id="R3_B1F_EH"></button>
+        </div>
+        <div class="ranking-container" id="co2_ranking"></div>
+    </div>
+</body>
+
+</html>
