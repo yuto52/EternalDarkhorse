@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
 <body>
-    <input id="date" type="date" min="2023-04-10" max="2024-07-13">
+    <input id="date" type="date" min="2024-06-01" max="2024-07-13">
     <button id="plotButton">過去/予測データを表示</button>
     
     <canvas id="myChart1" width="400" height="200"></canvas>
@@ -20,13 +20,6 @@
         let myChart2 = null;
         let myChart3 = null;
 
-        const sensorDataUrl = '/mnt/data/SensorData.csv';  // 実測値のデータURL
-        const forecastUrls = [
-            'https://example.com/csv1.csv',  // 予測データのCSVファイル1のURL
-            'https://example.com/csv2.csv',  // 予測データのCSVファイル2のURL
-            'https://example.com/csv3.csv'   // 予測データのCSVファイル3のURL
-        ];
-
         document.getElementById('plotButton').addEventListener('click', async function() {
             const dateInput = document.getElementById('date').value;
             
@@ -35,13 +28,17 @@
                 return;
             }
 
-            // 実測値のデータを取得
-            const sensorData = await fetchCSV(sensorDataUrl);
-            const forecastData = await Promise.all(forecastUrls.map(url => fetchCSV(url)));
+            const url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/co2/R3-B1F_EH_co2_fcst.csv';  // ここにCSVファイル1のURLを入力
+            const url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/temperature/R3-B1F_EH_temp_fcst.csv';  // ここにCSVファイル2のURLを入力
+            const url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/humidity/R3-B1F_EH_hum_fcst.csv';  // ここにCSVファイル3のURLを入力
 
-            plotData(sensorData, forecastData[0], dateInput, 'myChart1', myChart1, chart => myChart1 = chart, 400, 1200, 'CO2 [ppm]', 'co2');
-            plotData(sensorData, forecastData[1], dateInput, 'myChart2', myChart2, chart => myChart2 = chart, 10, 50, '気温 [℃]', 'temperature');
-            plotData(sensorData, forecastData[2], dateInput, 'myChart3', myChart3, chart => myChart3 = chart, 0, 100, '湿度 [%]', 'humidity');
+            const data1 = await fetchCSV(url1);
+            const data2 = await fetchCSV(url2);
+            const data3 = await fetchCSV(url3);
+
+            plotData(data1, dateInput, 'myChart1', myChart1, chart => myChart1 = chart, 400, 1200, 'CO2 [ppm]');
+            plotData(data2, dateInput, 'myChart2', myChart2, chart => myChart2 = chart, 10, 50, '気温 [℃]');
+            plotData(data3, dateInput, 'myChart3', myChart3, chart => myChart3 = chart, 0, 100, '湿度 [%]');
         });
 
         async function fetchCSV(url) {
@@ -67,25 +64,16 @@
             return result;
         }
 
-        function plotData(sensorData, forecastData, date, canvasId, existingChart, updateChartRef, yMin, yMax, label, dataKey) {
-            const dateObj = new Date(date);
-            const endOfJune = new Date('2024-06-30');
+        function plotData(data, date, canvasId, existingChart, updateChartRef, yMin, yMax, label) {
+            const filteredData = data.filter(row => row.ds.startsWith(date));
 
-            let dataToPlot;
-
-            if (dateObj <= endOfJune) {
-                dataToPlot = sensorData.filter(row => row.ds.startsWith(date));
-            } else {
-                dataToPlot = forecastData.filter(row => row.ds.startsWith(date));
-            }
-
-            if (dataToPlot.length === 0) {
+            if (filteredData.length === 0) {
                 alert(`指定された日付のデータがありません (${canvasId})。`);
                 return;
             }
 
-            const labels = dataToPlot.map(row => row.ds);
-            const values = dataToPlot.map(row => parseFloat(row[dataKey]));
+            const labels = filteredData.map(row => row.ds);
+            const values = filteredData.map(row => parseFloat(row.yhat));
 
             const ctx = document.getElementById(canvasId).getContext('2d');
             
