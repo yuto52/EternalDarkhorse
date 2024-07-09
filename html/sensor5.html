@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R3_401</title>
+    <title>R3_3F_EH</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
@@ -35,14 +35,14 @@
             let dataKey;
 
             if (selectedDate <= endOfJune) {
-                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/co2/R3-401_co2_actual.csv';  // 実測値のCSVファイルのパス
-                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/temperature/R3-401_temp_actual.csv';  // 実測値のCSVファイルのパス
-                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/humidity/R3-401_hum_actual.csv';  // 実測値のCSVファイルのパス
+                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/co2/R3-3F_EH_co2_actual.csv';  // 実測値のCSVファイルのパス
+                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/temperature/R3-3F_EH_temp_actual.csv';  // 実測値のCSVファイルのパス
+                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/humidity/R3-3F_EH_hum_actual.csv';  // 実測値のCSVファイルのパス
                 dataKey = 'y';  // 実測値のカラム名
             } else {
-                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/co2/R3-401_co2_fcst.csv';  // 予測データのCSVファイルのパス
-                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/temperature/R3-401_temp_fcst.csv';  // 予測データのCSVファイルのパス
-                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/humidity/R3-401_hum_fcst.csv';  // 予測データのCSVファイルのパス
+                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/co2/R3-3F_EH_co2_fcst.csv';  // 予測データのCSVファイルのパス
+                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/temperature/R3-3F_EH_temp_fcst.csv';  // 予測データのCSVファイルのパス
+                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/humidity/R3-3F_EH_hum_fcst.csv';  // 予測データのCSVファイルのパス
                 dataKey = 'yhat';  // 予測値のカラム名
             }
 
