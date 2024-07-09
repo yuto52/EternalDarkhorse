@@ -18,21 +18,40 @@
         import matplotlib.pyplot as plt
         import matplotlib.dates as mdates
         import matplotlib.ticker as ticker
-        from js import document
+        from js import document, fetch
         import micropip
         import asyncio
+        from pyodide.ffi import create_proxy
+        from io import StringIO
 
         async def load_packages():
             # 必要なパッケージをインストール
             await micropip.install("pandas")
             await micropip.install("matplotlib")
 
+        async def fetch_csv(url):
+            response = await fetch(url)
+            text = await response.text()
+            return text
+
         async def main():
             await load_packages()
 
-            # CSVファイルのURL（正しいURLに置き換えてください）
-            url = "C:\unity\EternalDarkhorse\predicts\R3-B1F_EH_co2_fcst.csv"
-            df = pd.read_csv(url)
+            # CSVファイルのURL
+            url = "https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/predicts/R3-B1F_EH_co2_fcst.csv"
+            csv_text = await fetch_csv(url)
+
+            # デバッグ用にCSVデータの内容を表示
+            print("CSVデータの内容:\n", csv_text)
+
+            # CSVデータをDataFrameに読み込む
+            df = pd.read_csv(StringIO(csv_text))
+
+            # デバッグ用にCSVデータの先頭を表示
+            print("CSVデータの先頭:\n", df.head())
+
+            # データフレームの列名を表示
+            print("CSVデータの列名:\n", df.columns)
 
             # 日付取得とグラフ描画
             def plot_graph(event):
@@ -69,8 +88,10 @@
 
                 plt.show()
 
+            # 関数をプロキシでラップ
+            plot_graph_proxy = create_proxy(plot_graph)
             # ボタンクリックイベントに関数をバインド
-            document.getElementById("plotButton").addEventListener("click", plot_graph)
+            document.getElementById("plotButton").addEventListener("click", plot_graph_proxy)
 
         # 非同期関数を呼び出す
         asyncio.ensure_future(main())
