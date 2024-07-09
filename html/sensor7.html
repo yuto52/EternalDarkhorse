@@ -49,21 +49,21 @@
             reader1.onload = function(e) {
                 const csv = e.target.result;
                 const data = parseCSV(csv);
-                plotData(data, dateInput, 'myChart1', myChart1, chart => myChart1 = chart);
+                plotData(data, dateInput, 'myChart1', myChart1, chart => myChart1 = chart, 400, 1200, 'CO2 [ppm]');
             };
             reader1.readAsText(file1);
 
             reader2.onload = function(e) {
                 const csv = e.target.result;
                 const data = parseCSV(csv);
-                plotData(data, dateInput, 'myChart2', myChart2, chart => myChart2 = chart);
+                plotData(data, dateInput, 'myChart2', myChart2, chart => myChart2 = chart, 10, 50, '気温 [℃]');
             };
             reader2.readAsText(file2);
 
             reader3.onload = function(e) {
                 const csv = e.target.result;
                 const data = parseCSV(csv);
-                plotData(data, dateInput, 'myChart3', myChart3, chart => myChart3 = chart);
+                plotData(data, dateInput, 'myChart3', myChart3, chart => myChart3 = chart, 0, 100, '湿度 [%]');
             };
             reader3.readAsText(file3);
         });
@@ -85,7 +85,7 @@
             return result;
         }
 
-        function plotData(data, date, canvasId, existingChart, updateChartRef) {
+        function plotData(data, date, canvasId, existingChart, updateChartRef, yMin, yMax, label) {
             const filteredData = data.filter(row => row.ds.startsWith(date));
 
             if (filteredData.length === 0) {
@@ -108,7 +108,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'CO2 [ppm]',
+                        label: label,
                         data: values,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
@@ -124,8 +124,8 @@
                         },
                         y: {
                             beginAtZero: false,
-                            suggestedMin: 400,
-                            suggestedMax: 550
+                            min: yMin,
+                            max: yMax
                         }
                     }
                 }
