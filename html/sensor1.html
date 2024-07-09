@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ｒ３ーB１Ｆ_ＥＨ</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <input id="date" type="date" min="2024-06-01" max="2024-07-13">
+    <button id="plotButton">過去/予測データを表示</button>
+    
+    <canvas id="myChart1" width="400" height="200"></canvas>
+    <canvas id="myChart2" width="400" height="200"></canvas>
+    <canvas id="myChart3" width="400" height="200"></canvas>
+    
+    <script>
+        let myChart1 = null;
+        let myChart2 = null;
+        let myChart3 = null;
+
+        document.getElementById('plotButton').addEventListener('click', async function() {
+            const dateInput = document.getElementById('date').value;
+            
+            if (!dateInput) {
+                alert('日付を選択してください。');
+                return;
+            }
+
+            const url1 = 'https://example.com/csv1.csv';
+            const url2 = 'https://example.com/csv2.csv';
+            const url3 = 'https://example.com/csv3.csv';
+
+            const data1 = await fetchCSV(url1);
+            const data2 = await fetchCSV(url2);
+            const data3 = await fetchCSV(url3);
+
+            plotData(data1, dateInput, 'myChart1', myChart1, chart => myChart1 = chart, 400, 1200, 'CO2 [ppm]');
+            plotData(data2, dateInput, 'myChart2', myChart2, chart => myChart2 = chart, 10, 50, '気温 [℃]');
+            plotData(data3, dateInput, 'myChart3', myChart3, chart => myChart3 = chart, 0, 100, '湿度 [%]');
+        });
+
+        async function fetchCSV(url) {
+            const response = await fetch(url);
+            const text = await response.text();
+            return parseCSV(text);
+        }
+
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const result = [];
+            const headers = lines[0].split(',');
+
+            for (let i = 1; i < lines.length; i++) {
+                const obj = {};
+                const currentline = lines[i].split(',');
+
+                for (let j = 0; j < headers.length; j++) {
+                    obj[headers[j]] = currentline[j];
+                }
+                result.push(obj);
+            }
+            return result;
+        }
+
+        function plotData(data, date, canvasId, existingChart, updateChartRef, yMin, yMax, label) {
+            const filteredData = data.filter(row => row.ds.startsWith(date));
+
+            if (filteredData.length === 0) {
+                alert(`指定された日付のデータがありません (${canvasId})。`);
+                return;
+            }
+
+            const labels = filteredData.map(row => row.ds);
+            const values = filteredData.map(row => parseFloat(row.yhat));
+
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // 既存のチャートがあれば破棄
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            const newChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: yMin,
+                            max: yMax
+                        }
+                    }
+                }
+            });
+
+            // チャート参照を更新
+            updateChartRef(newChart);
+        }
+    </script>
+</body>
+</html>
