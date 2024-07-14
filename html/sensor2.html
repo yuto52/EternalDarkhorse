@@ -35,14 +35,14 @@
             let dataKey;
 
             if (selectedDate <= endOfJune) {
-                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/co2/R3-403_co2_actual.csv';  // 実測値のCSVファイルのパス
-                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/temperature/R3-403_temp_actual.csv';  // 実測値のCSVファイルのパス
-                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/actual/humidity/R3-403_hum_actual.csv';  // 実測値のCSVファイルのパス
+                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/actual/co2/R3-403_co2_actual.csv';  // 実測値のCSVファイルのパス
+                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/actual/temperature/R3-403_temp_actual.csv';  // 実測値のCSVファイルのパス
+                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/actual/humidity/R3-403_hum_actual.csv';  // 実測値のCSVファイルのパス
                 dataKey = 'y';  // 実測値のカラム名
             } else {
-                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/co2/R3-403_co2_fcst.csv';  // 予測データのCSVファイルのパス
-                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/temperature/R3-403_temp_fcst.csv';  // 予測データのCSVファイルのパス
-                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/python/data/fcst/humidity/R3-403_hum_fcst.csv';  // 予測データのCSVファイルのパス
+                url1 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/fcst/co2/R3-403_co2_fcst.csv';  // 予測データのCSVファイルのパス
+                url2 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/fcst/temperature/R3-403_temp_fcst.csv';  // 予測データのCSVファイルのパス
+                url3 = 'https://raw.githubusercontent.com/yuto52/EternalDarkhorse/main/data/fcst/humidity/R3-403_hum_fcst.csv';  // 予測データのCSVファイルのパス
                 dataKey = 'yhat';  // 予測値のカラム名
             }
 
