@@ -1,2 +1,0 @@
-# EternalDarkhorse
-先進プロジェクト実験1のIOT分野のホームページを作成する。
